@@ -1,0 +1,14 @@
+name: ci_workflows
+on: 
+  push
+
+jobs:
+  my_first_ci:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking out our code
+      uses: actions/checkout@master
+      
+    - name: test
+      run: |
+        echo "rayat"
