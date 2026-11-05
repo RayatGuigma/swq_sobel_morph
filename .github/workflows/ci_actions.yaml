@@ -1,4 +1,4 @@
-name: CI Ubuntu - Compilation et execution
+name: CI Ubuntu ET Windows - Compilation et execution
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs: #travaux a realiser
-  build_exe:   #nom de la tache
+  build_exe_ubuntu:   #nom de la tache
     runs-on: ubuntu-latest   # ebvironnement (OS) d'execution
 
     steps:
@@ -38,4 +38,25 @@ jobs: #travaux a realiser
         run: xvfb-run -a ./build/Release/sobel
 
 
-#uses pour  l'utilisation d'action existant
+  
+  build_windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Recuperation des sources
+        uses: actions/checkout@v5
+
+      - name: Preparation des donnees
+        run: mkdir dat
+
+      - name: Configuration CMake
+        run: cmake -S . -B build
+
+      - name: Compilation
+        run: cmake --build build --config Release --parallel 2
+
+      - name: Execution
+        run: .\build\sobel.exe
+        
+        
+        
