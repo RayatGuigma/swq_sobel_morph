@@ -1,14 +1,22 @@
-name: ci_workflows
-on: 
-  push
+name: ci Ubuntu : compilation et execution
+on:
+  push: #exe au push
+   brnches: 
+    -GitAction 
+  workflow_dispatch: #lancer manuellement sans nv push 
 
-jobs:
-  my_first_ci:
-    runs-on: ubuntu-latest
+jobs: #travaux a realiser
+  build_exe: #nom de la tache
+    runs-on: ubuntu-latest  # ebvironnement (OS) d'execution
     steps:
-    - name: Checking out our code
+    - name: recuperation des codes src
       uses: actions/checkout@master
       
-    - name: test
+    - name: compilation
       run: |
-        echo "rayat"
+        gcc -o sobel main.c
+    - name: execution
+      run: 
+        ./sobel 
+
+#uses pour  l'utilisation d'action existant
