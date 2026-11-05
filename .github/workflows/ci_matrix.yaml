@@ -35,6 +35,11 @@ jobs:
       - name: Compilation
         run: cmake --build build --config Release --parallel 2
         
+      - name: Copie des DLL (lib dynamique dans le dossier de l'exe)
+        if: runner.os == 'Windows'
+        run: |
+          Copy-Item build\*.dll build\Release\ -Force
+        
       - name: Tests unitaires
         run: ctest --test-dir build -C Release --output-on-failure
 
