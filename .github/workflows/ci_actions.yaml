@@ -54,9 +54,13 @@ jobs: #travaux a realiser
 
       - name: Compilation
         run: cmake --build build --config Release --parallel 2
+        
+      - name: Recherche de l'executable
+        run: |
+          Get-ChildItem -Path build -Filter sobel.exe -Recurse
 
       - name: Execution
-        run: .\build\sobel.exe
+        run: .\build\Release\sobel.exe
         
         
         
