@@ -1,0 +1,45 @@
+
+name: CI avec matrice Ubuntu et Windows
+
+on:
+  push:
+    branches:
+      - GitAction
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false  #continuer meme si un echoue
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Recuperation des sources
+        uses: actions/checkout@v5
+
+      - name: Installation des dependances Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libsdl2-dev libsdl2-ttf-dev xvfb
+
+      - name: Preparation des donnees
+        run: cmake -E make_directory dat
+
+      - name: Configuration CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compilation
+        run: cmake --build build --config Release --parallel 2
+
+      - name: Execution sous Ubuntu
+        if: runner.os == 'Linux'
+        run: xvfb-run -a ./build/Release/sobel
+
+      - name: Execution sous Windows
+        if: runner.os == 'Windows'
+        run: .\build\Release\sobel.exe
+
