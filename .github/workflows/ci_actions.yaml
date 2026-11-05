@@ -32,6 +32,9 @@ jobs: #travaux a realiser
 
       - name: Compilation
         run: cmake --build build --parallel 2
+        
+      - name: Tests unitaires
+        run: ctest --test-dir build -C Release --output-on-failure
 
       #exec
       - name: Execution du programme
@@ -66,6 +69,9 @@ jobs: #travaux a realiser
       - name: Verification des DLL
         run: |
           Get-ChildItem -Path build -Filter "*.dll" -Recurse
+          
+      - name: Tests unitaires
+        run: ctest --test-dir build -C Release --output-on-failure   
 
       - name: Execution
         run: .\build\Release\sobel.exe

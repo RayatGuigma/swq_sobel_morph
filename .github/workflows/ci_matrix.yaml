@@ -34,6 +34,9 @@ jobs:
 
       - name: Compilation
         run: cmake --build build --config Release --parallel 2
+        
+      - name: Tests unitaires
+        run: ctest --test-dir build -C Release --output-on-failure
 
       - name: Execution sous Ubuntu
         if: runner.os == 'Linux'
