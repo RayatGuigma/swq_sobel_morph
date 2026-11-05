@@ -1,36 +1,41 @@
-name: ci Ubuntu : compilation et execution
+name: CI Ubuntu - Compilation et execution
+
 on:
-  push: #exe au push
-   brnches: 
-    -GitAction 
-  workflow_dispatch: #lancer manuellement sans nv push 
+  push:
+    branches:
+      - GitAction
+
+  workflow_dispatch:
 
 jobs: #travaux a realiser
-  build_exe: #nom de la tache
-    runs-on: ubuntu-latest  # ebvironnement (OS) d'execution
+  build_exe:   #nom de la tache
+    runs-on: ubuntu-latest   # ebvironnement (OS) d'execution
+
     steps:
-    - name: recuperation des codes src
-      uses: actions/checkout@v4
+      # Recup code source
+      - name: Recuperation des sources
+        uses: actions/checkout@v4
 
-    - name: dependances
-      run: |
-        sudo apt-get update
-	sudo apt-get install -y build-essential cmake libsdl2-dev libsdl2-ttf-dev xvfb
-    
-    - name: data
-      run: 
-       mkdir -p dat
-      
-    - name: config cmake
-      run:
-      	cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      #installation des dependances
+      - name: Installation des dependances
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libsdl2-dev libsdl2-ttf-dev xvfb
 
-    - name: compilation
-      run: |
-        cmake --build build --parallel 2
-        
-    - name: execution
-      run: 
-        xvfb-run -a ./build/Release/sobel 
+      #data
+      - name: Preparation des donnees
+        run: mkdir -p dat
+
+      #config cmake
+      - name: Configuration CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compilation
+        run: cmake --build build --parallel 2
+
+      #exec
+      - name: Execution du programme
+        run: xvfb-run -a ./build/Release/sobel
+
 
 #uses pour  l'utilisation d'action existant
