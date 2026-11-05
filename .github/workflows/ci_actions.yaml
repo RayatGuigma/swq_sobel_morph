@@ -58,6 +58,10 @@ jobs: #travaux a realiser
       - name: Recherche de l'executable
         run: |
           Get-ChildItem -Path build -Filter sobel.exe -Recurse
+          
+      - name: Verification des DLL
+        run: |
+          Get-ChildItem -Path build -Filter "*.dll" -Recurse
 
       - name: Execution
         run: .\build\Release\sobel.exe
