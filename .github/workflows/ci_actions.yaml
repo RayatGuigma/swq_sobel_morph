@@ -55,6 +55,10 @@ jobs: #travaux a realiser
       - name: Compilation
         run: cmake --build build --config Release --parallel 2
         
+      - name: Copie des DLL (lib dynamique dans le dossier de l'exe)
+        run: |
+          Copy-Item build\*.dll build\Release\ -Force
+        
       - name: Recherche de l'executable
         run: |
           Get-ChildItem -Path build -Filter sobel.exe -Recurse
@@ -62,6 +66,17 @@ jobs: #travaux a realiser
       - name: Verification des DLL
         run: |
           Get-ChildItem -Path build -Filter "*.dll" -Recurse
+          
+      - name: Execution et diagnostic
+        run: |
+          Set-Location build\Release
+          Write-Host "Lancement du programme Sobel..."
+          .\sobel.exe
+          $code = $LASTEXITCODE
+          Write-Host "Code retour : $code"
+          if ($code -ne 0) {
+            throw "Le programme Sobel a echoue avec le code $code"
+          }
 
       - name: Execution
         run: .\build\Release\sobel.exe
