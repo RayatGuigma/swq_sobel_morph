@@ -11,12 +11,24 @@ jobs: #travaux a realiser
     steps:
     - name: recuperation des codes src
       uses: actions/checkout@master
+
+    - name: dependances
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake libsdl2-dev libsdl2-ttf-dev xvfb
+    
+    - name: data
+      run: mkdir p dat
       
+    - name: config cmake
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
     - name: compilation
       run: |
-        gcc -o sobel main.c
+        cmake --build build --parallel 2
+        
     - name: execution
       run: 
-        ./sobel 
+        xvfb-run -a ./build/Release/sobel 
 
 #uses pour  l'utilisation d'action existant
